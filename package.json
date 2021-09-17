@@ -1,0 +1,8 @@
+{
+    "name": "onboarding_flow",
+    "private": true,
+    "workspaces": [
+        "frontend",
+        "backend"
+    ]
+}

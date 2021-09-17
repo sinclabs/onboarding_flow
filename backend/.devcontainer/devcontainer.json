@@ -1,0 +1,10 @@
+{
+  "name": "express-rest-api",
+  "dockerComposeFile": "./docker-compose.devcontainer.yml",
+  "service": "app-node",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  "extensions": [
+    "humao.rest-client"
+  ]
+}

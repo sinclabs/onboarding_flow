@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  app-node:
+    build:
+      context: ../
+      dockerfile: ./.devcontainer/Dockerfile
+    container_name: app-node
+    ports:
+      - "6000:6000"
+    volumes:
+      - ..:/workspace:cached
+      - ~/.ssh:/root/.ssh
+    command:
+      sleep infinity

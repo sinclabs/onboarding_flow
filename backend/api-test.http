@@ -1,0 +1,36 @@
+@hostname = localhost
+@port = 6000
+@host = http://{{hostname}}:{{port}}
+@baseURL = {{host}}/api/v1/
+@auth = Basic cm9vdDpwYXNzd29yZA==
+@testId = 112233
+
+### Create
+post {{baseURL}}/resources
+Authorization: {{auth}}
+content-type: application/json
+
+{
+    "param": "test-id-{{testId}}"
+}
+
+### Read
+get {{baseURL}}/resources/test-id-{{testId}}
+Authorization: {{auth}}
+
+### Update
+put {{baseURL}}/resources/test-id-{{testId}}
+Authorization: {{auth}}
+content-type: application/json
+
+{
+    "pemKey": "test-key-changed"
+}
+
+### Delete
+delete {{baseURL}}/resources/test-id-{{testId}}
+Authorization: {{auth}}
+
+### Read All
+get {{baseURL}}/resources
+Authorization: {{auth}}
