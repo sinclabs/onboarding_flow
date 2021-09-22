@@ -6,10 +6,11 @@ import {
     ValidatedRequest,
     ValidatedRequestSchema,
 } from "express-joi-validation";
+import { v4 as uuid } from 'uuid'
 
 import logger from "src/utils/Logger";
 import { users } from "src/db";
-import { hashPassword } from "../login";
+import { hashPassword } from "src/utils/functions";
 
 const validator = createValidator({});
 const router = Router();
@@ -32,7 +33,7 @@ router.get("/", validator.body(bodySchema), async (req: ValidatedRequest<SignupR
         const salt = process.env.salt ?? "";    
         const hash = await hashPassword(password, salt)
 
-        const user = users.insert({ username, password: hash })
+        const user = users.insert({ username, password: hash, id: uuid()})
         if(!user) {
             return res.status(500).json({
                 fail: 'Something went wrong. Please verify and try again'

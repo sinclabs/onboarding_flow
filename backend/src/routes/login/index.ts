@@ -6,10 +6,10 @@ import {
     ValidatedRequest,
     ValidatedRequestSchema,
 } from "express-joi-validation";
-import crypto from "crypto";
 
 import logger from "src/utils/Logger";
 import { users } from "src/db";
+import { createJWT, hashPassword } from "src/utils/functions";
 
 const validator = createValidator({});
 const router = Router();
@@ -26,17 +26,6 @@ interface LoginRequestSchema extends ValidatedRequestSchema {
   };
 }
 
-export const hashPassword = (password: string, salt: string): Promise<string> => new Promise((resolve, reject) => {
-    crypto.pbkdf2(password, salt, 10, 256, 'sha256',  (error, hash) => {
-        if(error) {
-            logger.error(error)
-            reject(error)
-        }
-
-        resolve(hash.toString())
-    })
-})
-
 router.get("/", validator.body(bodySchema), async (req: ValidatedRequest<LoginRequestSchema>, res) => {
     try {
         const { username, password } = req.body;
@@ -49,8 +38,10 @@ router.get("/", validator.body(bodySchema), async (req: ValidatedRequest<LoginRe
                 fail: 'Credentials don\'t exist. PLease verify and try again'
             })
         }
+        const token = createJWT({ username: user.username, id: user.id })
+        logger.info(token)
         res.json({
-            success: true
+            success: token
         })
     } catch (error) {
         logger.error(error)
